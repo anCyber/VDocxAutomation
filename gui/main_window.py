@@ -7,9 +7,8 @@ def display_window(text):
     app = QApplication(sys.argv)
     window = QWidget()
 
-    temp_label = QLabel()
+    temp_label = QLabel(window)
     temp_label.setText(f"{text}")
-    temp_label.setParent(window)
     
     window.show()
     app.exec()
