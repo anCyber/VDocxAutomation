@@ -94,6 +94,7 @@ def create_single_page(output_file, should_add_page_break: bool) -> None:
 
 
 def create_many_files():
+    ''' Creates N .docx files each containing a single filled page '''
     FILES_AMOUNT = 10
     for i in range (FILES_AMOUNT):
         OutputFile: Document = Document()
@@ -104,15 +105,14 @@ def create_many_files():
 
 
 def create_many_pages():
+    ''' Creates a single .docx file containing N filled pages '''
     PAGES_AMOUNT = 10
 
     OutputFile: Document = Document()
     configure_paragraph_styles(OutputFile)
-    for i in range (PAGES_AMOUNT):
-        if (i != PAGES_AMOUNT - 1):
-            create_single_page(OutputFile, True)
-        else:
-            create_single_page(OutputFile, False)
+    for i in range (PAGES_AMOUNT - 1):
+        create_single_page(OutputFile, True)
+    create_single_page(OutputFile, False)
 
     modify_pages(OutputFile)
     OutputFile.save(PATH_TO_SINGLE_OUTPUT)
