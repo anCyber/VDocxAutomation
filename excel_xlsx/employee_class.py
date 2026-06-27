@@ -69,9 +69,9 @@ class Employee:
 
 
 
-def create_class_instances(PATH_TO_DATA_FILE: str, read_rows_amount: int, first_cell_row: int, first_cell_column_letter: str) -> list[Employee]:
+def create_class_instances(PATH_TO_DATA_FILE: str, read_rows_amount: int, first_cell_row: int, first_cell_column_letter: str, should_create_copy_of_excel: bool) -> list[Employee]:
     ''' Creates insatances of Employee class for every list of info read from excel. Also creates a list of all class instances '''
-    every_employee_info_list = get_list_of_info_about_employees(PATH_TO_DATA_FILE, read_rows_amount, first_cell_row, first_cell_column_letter)
+    every_employee_info_list = get_list_of_info_about_employees(PATH_TO_DATA_FILE, read_rows_amount, first_cell_row, first_cell_column_letter, should_create_copy_of_excel)
     employees_list: list = []
     for employee_info in every_employee_info_list:
         new_employee = Employee(
