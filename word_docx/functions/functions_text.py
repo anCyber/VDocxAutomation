@@ -32,7 +32,7 @@ def write_paragraph_organisation_name(document) -> None:
 
 
 
-def write_paragraph_recipient_person(document) -> None:
+def write_paragraph_recipient_person(document, position_dative_case: str, workplace_unit_genitive_case: str, surname_dative_case: str, first_name_initial: str, patronymic_initial: str) -> None:
     ''' Writes second paragraph (about the recipient person) into the given file <type: Document>  '''
 
     separator_paragraph = document.add_paragraph()
@@ -53,11 +53,11 @@ def write_paragraph_recipient_person(document) -> None:
     recipient_person_paragraph.paragraph_format.space_after = Pt(0)
     recipient_person_paragraph.paragraph_format.left_indent = Cm(11.25)
     recipient_person_paragraph.add_run(
-        "Ведущему специалисту\nОтдела кадров\n",
+        f"{position_dative_case}\n{workplace_unit_genitive_case}\n",
         style = "TNR14PtStyle"
     )
     recipient_person_paragraph.add_run(
-        "Борисовой Е.С.",
+        f"{surname_dative_case} {first_name_initial}.{patronymic_initial}.",
         style = "TNR14PtStyle"
     ).bold = True
 

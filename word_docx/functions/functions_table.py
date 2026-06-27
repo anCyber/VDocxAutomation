@@ -67,7 +67,7 @@ def fill_in_first_row(table):
     add_text_to_main_table(first_row[2], "", WD_ALIGN_PARAGRAPH.LEFT)
     add_text_to_main_table(first_row[3], "", WD_ALIGN_PARAGRAPH.LEFT)
     add_text_to_main_table(first_row[4], "№", WD_ALIGN_PARAGRAPH.RIGHT)
-    add_text_to_main_table(first_row[5], "б/н", WD_ALIGN_PARAGRAPH.LEFT)
+    add_text_to_main_table(first_row[5], "    б/н", WD_ALIGN_PARAGRAPH.LEFT)
     first_row[0].width = Cm(3.25)
     first_row[1].width = Cm(3.25)
     first_row[2].width = Cm(5.27)
@@ -79,16 +79,16 @@ def fill_in_first_row(table):
 
 
 
-def fill_in_second_row(table):
+def fill_in_second_row(table, first_name: str, surname: str):
     ''' Fills in the second row of table and configures cells '''
     second_row = table.rows[1].cells
-    add_text_to_main_table(second_row[0], "\nУважаемый (-ая) Елизавета Сергеевна!", WD_ALIGN_PARAGRAPH.CENTER)
+    add_text_to_main_table(second_row[0], f"\nУважаемый (-ая) {first_name} {surname}!", WD_ALIGN_PARAGRAPH.CENTER)
     second_row_012345_merged = second_row[0].merge(second_row[5])
     second_row[0].paragraphs[0].paragraph_format.space_after = Pt(4)
 
 
 
-def fill_in_third_row(table):
+def fill_in_third_row(table, scheduled_date: str, days_amount: int, days_amount_word_form_calendar: str, days_amount_word_form_day: str):
     ''' Fills in the third row of table and configures cells '''
     third_row = table.rows[2].cells
     add_text_to_main_table(
@@ -99,11 +99,11 @@ def fill_in_third_row(table):
         WD_ALIGN_PARAGRAPH.JUSTIFY
     )
     third_row[0].paragraphs[0].add_run(
-        " 06.07.2026 ",
+        f" {scheduled_date} ",
         style = "TNR12PtStyle"
     ).bold = True
     third_row[0].paragraphs[0].add_run(
-        "года продолжительностью 10 календарных дней.",
+        f"года продолжительностью {days_amount} {days_amount_word_form_calendar} {days_amount_word_form_day}.",
         style = "TNR12PtStyle"
     )
     third_row_012345_merged = third_row[0].merge(third_row[5])

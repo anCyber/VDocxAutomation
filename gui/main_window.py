@@ -17,4 +17,4 @@ def display_window(text):
 
 
 if (__name__ == "__main__"):
-    display_window()
+    display_window("yoo")
