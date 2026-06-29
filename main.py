@@ -1,4 +1,4 @@
-from gui.main_window import display_window
+from gui.main_window import main_ui
 from excel_xlsx.employee_class import create_class_instances
 from word_docx.create_docx import create_word_document
 
@@ -12,7 +12,7 @@ FIRST_CELL_COLUMN_LETTER = "I"
 SHOULD_CREATE_COPY_OF_EXCEL = True
 
 def main():
-    display_window("How's it going mate?")
+    main_ui()
     list_of_employee_instances: list = create_class_instances(
         PATH_TO_DATA_FILE = PATH_TO_DATA_FILE,
         read_rows_amount = EMPLOYEES_AMOUNT,
