@@ -90,6 +90,29 @@ class ___InsertedRowOrColumnSymbolIsOfUnexpectedTypeOrOutOfRange_PopUpWindow___(
 
 
 
+class ___InsertedTopLeftCoordinatIsIncorrect_PopUpWindow___(QMessageBox):
+    def __init__(self):
+        super().__init__()
+        
+        self.setWindowTitle("Ошибка!")
+        self.setIcon(QMessageBox.Icon.Critical)
+        self.setText("Проблема с введёнными координатами левого-верхнего угла данных таблицы. Введённая координата не является левым верхним углом данных.\n" \
+        "Координата должна вести на ячейку 'Структурное подразделение' первого работника.")
+        self.continue_button = self.addButton(f"Указать новую координату", QMessageBox.ButtonRole.YesRole)
+        self.abort_button = self.addButton("Выйти", QMessageBox.ButtonRole.NoRole)
+        self.setDefaultButton(self.abort_button)
+        self.buttonClicked.connect(self.option_clicked)
+        if (self.exec() == 3):  # sys.exit if pop up was closed with the "x" button
+            sys.exit()
+
+    def option_clicked(self):
+        if (self.clickedButton() == self.continue_button):
+            self.close()
+        else:
+            sys.exit()
+
+
+
 class ___InputDataFileWithSuchDirectoryDoesNotExist_PopUpWindow___(QMessageBox):
     def __init__(self, text: str):
         super().__init__()

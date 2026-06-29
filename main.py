@@ -18,6 +18,7 @@ from excel_xlsx.popup_windows import (
     ___InsertedRowOrColumnSymbolIsOfUnexpectedTypeOrOutOfRange_PopUpWindow___,
     ___InputDataFileWithSuchDirectoryDoesNotExist_PopUpWindow___,
     ___OutputFileWithSuchDirectoryDoesNotExist_PopUpWindow___,
+    ___InsertedTopLeftCoordinatIsIncorrect_PopUpWindow___,
     ___RunWasSuccessfull_PopUpWindow___
 )
 from main_script import run_program
@@ -126,8 +127,8 @@ class Window(QMainWindow):
         self.top_left_coordinate_label = Q_DefaultTextLabel("Координаты левой-верхней\nячейки таблицы с данными:", additional_qss="")
         self.grid_layout.addWidget(self.top_left_coordinate_label, 11, 3, 5, 5, alignment=(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter))
 
-        self.top_left_coordinate_edit = Q_LineEdit(additional_qss="margin-left: 24px;")
-        self.grid_layout.addWidget(self.top_left_coordinate_edit, 12, 9, 3, 1,alignment=Qt.AlignmentFlag.AlignVCenter)
+        self.top_left_coordinate_line_edit = Q_LineEdit(additional_qss="margin-left: 24px;")
+        self.grid_layout.addWidget(self.top_left_coordinate_line_edit, 12, 9, 3, 1,alignment=Qt.AlignmentFlag.AlignVCenter)
 
 
     def create_copy_excel_section(self) -> None:
@@ -297,24 +298,24 @@ class Window(QMainWindow):
             return []
 
         try:
-            FIRST_CELL_COLUMN_LETTER: str = self.top_left_coordinate_edit.text()[0]
+            FIRST_CELL_COLUMN_LETTER: str = self.top_left_coordinate_line_edit.text()[0]
         except IndexError:
             ___InsertedRowOrColumnSymbolIsOfUnexpectedTypeOrOutOfRange_PopUpWindow___("Empty")
-            self.top_left_coordinate_edit.setFocus()
+            self.top_left_coordinate_line_edit.setFocus()
             return []
 
         if ((ord(FIRST_CELL_COLUMN_LETTER) < 65) or (ord(FIRST_CELL_COLUMN_LETTER) > 84)):
             ___InsertedRowOrColumnSymbolIsOfUnexpectedTypeOrOutOfRange_PopUpWindow___("")
-            self.top_left_coordinate_edit.setText("")
-            self.top_left_coordinate_edit.setFocus()
+            self.top_left_coordinate_line_edit.setText("")
+            self.top_left_coordinate_line_edit.setFocus()
             return []
 
         try:
-            FIRST_CELL_ROW: int = int(self.top_left_coordinate_edit.text()[1::])
+            FIRST_CELL_ROW: int = int(self.top_left_coordinate_line_edit.text()[1::])
         except ValueError:
             ___InsertedRowOrColumnSymbolIsOfUnexpectedTypeOrOutOfRange_PopUpWindow___("")
-            self.top_left_coordinate_edit.setText("")
-            self.top_left_coordinate_edit.setFocus()
+            self.top_left_coordinate_line_edit.setText("")
+            self.top_left_coordinate_line_edit.setFocus()
             return []
 
         should_create_copy_of_excel: bool = self.copy_excel_checkbox.isChecked()
@@ -339,11 +340,18 @@ class Window(QMainWindow):
         ''' Event listener for {self.run_button}. Initializes the program with the inserted values. '''
         data_list: list = self.validate_data()
         if (data_list != []):
-            was_run_succesfull: bool = run_program(
-                data_list[0], data_list[1], data_list[2], data_list[3], data_list[4], data_list[5], data_list[6]
-            )
+            try:
+                was_run_succesfull: bool = run_program(
+                    data_list[0], data_list[1], data_list[2], data_list[3], data_list[4], data_list[5], data_list[6]
+                )
+                ___RunWasSuccessfull_PopUpWindow___(was_run_succesfull)
+            except IndexError:
+                ___InsertedTopLeftCoordinatIsIncorrect_PopUpWindow___()
+                self.top_left_coordinate_line_edit.setText("")
+                self.top_left_coordinate_line_edit.setFocus()
+                self.top_left_coordinate_line_edit
 
-            ___RunWasSuccessfull_PopUpWindow___(was_run_succesfull)
+            
 
 
 
