@@ -143,8 +143,3 @@ def create_word_document(should_create_single_file: bool, PATH_TO_OUTPUT: str, E
         create_many_pages(PATH_TO_OUTPUT, EMPLOYEES_AMOUNT, list_of_employee_instances)
     else:
         create_many_files(PATH_TO_OUTPUT, EMPLOYEES_AMOUNT, list_of_employee_instances)
-
-
-
-if (__name__ == "__main__"):
-    create_word_document(True, r"Output\DocxFile.docx", 10)

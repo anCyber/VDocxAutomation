@@ -12,9 +12,19 @@ from gui.ui_elements.widget_classes import (
     Q_HeadingLabel, Q_DefaultTextLabel, Q_LineEdit, Q_RadioButton,
     Q_RadioButtonLabel, Q_ExploreButton, Q_CheckBox, Q_RunButton
 )
+
+from excel_xlsx.popup_windows import (
+    ___AttemptedToReadNegOrZeroRowsOrIncludesSymbols_PopUpWindow___,
+    ___InsertedRowOrColumnSymbolIsOfUnexpectedTypeOrOutOfRange_PopUpWindow___,
+    ___InputDataFileWithSuchDirectoryDoesNotExist_PopUpWindow___,
+    ___OutputFileWithSuchDirectoryDoesNotExist_PopUpWindow___,
+    ___RunWasSuccessfull_PopUpWindow___
+)
 from main_script import run_program
 
 import sys
+import os
+from os.path import exists
 
 
 class Window(QMainWindow):
@@ -146,7 +156,6 @@ class Window(QMainWindow):
 
     def create_main_background_widget(self, color1: str, color2: str) -> QWidget:
         ''' Creates widget that automatically takes up all the space in window and is used as background. Copied function from "AudioRedactor" project :) '''
-    
         background_central_widget = QWidget()
         self.setCentralWidget(background_central_widget)
         bg_widget_layout = QGridLayout(background_central_widget)
@@ -261,16 +270,66 @@ class Window(QMainWindow):
             should_create_single_file: bool = True
         else:
             should_create_single_file: bool = False
-        
-        EMPLOYEES_AMOUNT: int = int(self.employees_amount_line_edit.text())
-        PATH_TO_OUTPUT: str = fr"{self.output_path_line_edit.text()}"
 
-        FIRST_CELL_COLUMN_LETTER: str = self.top_left_coordinate_edit.text()[0]
-        FIRST_CELL_ROW: int = int(self.top_left_coordinate_edit.text()[1::])
+        try:
+            EMPLOYEES_AMOUNT: int = int(self.employees_amount_line_edit.text())
+            if (EMPLOYEES_AMOUNT < 1):
+                raise ValueError
+        except ValueError:
+            ___AttemptedToReadNegOrZeroRowsOrIncludesSymbols_PopUpWindow___()
+            self.employees_amount_line_edit.setText("")
+            self.employees_amount_line_edit.setFocus()
+            return []
+
+        PATH_TO_OUTPUT: str = fr"{self.output_path_line_edit.text()}"
+        if (PATH_TO_OUTPUT == ""):
+            ___OutputFileWithSuchDirectoryDoesNotExist_PopUpWindow___("Empty")
+            self.output_path_line_edit.setText("")
+            self.output_path_line_edit.setFocus()
+            return []
+        output_directory_split: list[str] = PATH_TO_OUTPUT.split(r"/")[:-1:]
+        separator: str = r"/"
+        output_directory_connected = separator.join(output_directory_split)
+        if (not os.path.isdir(output_directory_connected)):
+            ___OutputFileWithSuchDirectoryDoesNotExist_PopUpWindow___("")
+            self.output_path_line_edit.setText("")
+            self.output_path_line_edit.setFocus()
+            return []
+
+        try:
+            FIRST_CELL_COLUMN_LETTER: str = self.top_left_coordinate_edit.text()[0]
+        except IndexError:
+            ___InsertedRowOrColumnSymbolIsOfUnexpectedTypeOrOutOfRange_PopUpWindow___("Empty")
+            self.top_left_coordinate_edit.setFocus()
+            return []
+
+        if ((ord(FIRST_CELL_COLUMN_LETTER) < 65) or (ord(FIRST_CELL_COLUMN_LETTER) > 84)):
+            ___InsertedRowOrColumnSymbolIsOfUnexpectedTypeOrOutOfRange_PopUpWindow___("")
+            self.top_left_coordinate_edit.setText("")
+            self.top_left_coordinate_edit.setFocus()
+            return []
+
+        try:
+            FIRST_CELL_ROW: int = int(self.top_left_coordinate_edit.text()[1::])
+        except ValueError:
+            ___InsertedRowOrColumnSymbolIsOfUnexpectedTypeOrOutOfRange_PopUpWindow___("")
+            self.top_left_coordinate_edit.setText("")
+            self.top_left_coordinate_edit.setFocus()
+            return []
+
         should_create_copy_of_excel: bool = self.copy_excel_checkbox.isChecked()
 
+        
         PATH_TO_DATA_FILE: str = fr"{self.input_data_path_line_edit.text()}"
-
+        if (PATH_TO_DATA_FILE == ""):
+            ___InputDataFileWithSuchDirectoryDoesNotExist_PopUpWindow___("Empty")
+            self.input_data_path_line_edit.setFocus()
+            return []
+        if (not os.path.exists(PATH_TO_DATA_FILE)):
+            ___InputDataFileWithSuchDirectoryDoesNotExist_PopUpWindow___("")
+            self.input_data_path_line_edit.setText("")
+            self.input_data_path_line_edit.setFocus()
+            return []
         return [should_create_single_file, EMPLOYEES_AMOUNT, PATH_TO_OUTPUT, FIRST_CELL_COLUMN_LETTER, FIRST_CELL_ROW, should_create_copy_of_excel, PATH_TO_DATA_FILE]
 
 
@@ -279,15 +338,19 @@ class Window(QMainWindow):
     def _run_button_clicked_(self) -> None:
         ''' Event listener for {self.run_button}. Initializes the program with the inserted values. '''
         data_list: list = self.validate_data()
-        run_program(
-            data_list[0], data_list[1], data_list[2], data_list[3], data_list[4], data_list[5], data_list[6]
-        )
+        if (data_list != []):
+            was_run_succesfull: bool = run_program(
+                data_list[0], data_list[1], data_list[2], data_list[3], data_list[4], data_list[5], data_list[6]
+            )
+
+            ___RunWasSuccessfull_PopUpWindow___(was_run_succesfull)
 
 
 
 
 
-def main_ui():
+
+def main():
     app = QApplication([])
     window = Window()
     
@@ -298,4 +361,4 @@ def main_ui():
 
 
 if (__name__ == "__main__"):
-    main_ui()
+    main()

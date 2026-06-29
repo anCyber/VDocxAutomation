@@ -12,10 +12,7 @@ morph = pymorphy2.MorphAnalyzer()
 from pyphrasy.inflect import PhraseInflector
 inflector = PhraseInflector(morph)
 
-if (__name__ == "__main__"):
-    from read_excel import get_list_of_info_about_employees
-else:
-    from .read_excel import get_list_of_info_about_employees
+from .read_excel import get_list_of_info_about_employees
 
 
 
@@ -84,7 +81,3 @@ def create_class_instances(PATH_TO_DATA_FILE: str, read_rows_amount: int, first_
         employees_list.append(new_employee)
 
     return employees_list
-
-
-if (__name__ == "__main__"):
-    create_class_instances(r"excel_xlsx\data_text.xlsx", 10, 5, "A")
