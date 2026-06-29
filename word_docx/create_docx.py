@@ -113,17 +113,17 @@ def create_single_page(output_file: docx.Document, should_add_page_break: bool, 
 
     
 
-def create_many_files(PATH_TO_MANY_OUTPUTS: str, FILES_AMOUNT: int, list_of_employee_instances: list) -> None:
+def create_many_files(PATH_TO_OUTPUT: str, FILES_AMOUNT: int, list_of_employee_instances: list) -> None:
     ''' Creates N .docx files each containing a single filled page '''
     for i in range (FILES_AMOUNT):
         OutputFile: Document = Document()
         configure_paragraph_styles(OutputFile)
         create_single_page(OutputFile, False, list_of_employee_instances[i])
         modify_pages(OutputFile)
-        OutputFile.save(f"{PATH_TO_MANY_OUTPUTS}_{i + 1}.docx")
+        OutputFile.save(f"{PATH_TO_OUTPUT.removesuffix(".docx")}_{i + 1}.docx")
 
 
-def create_many_pages(PATH_TO_SINGLE_OUTPUT: str, PAGES_AMOUNT: int, list_of_employee_instances: list) -> None:
+def create_many_pages(PATH_TO_OUTPUT: str, PAGES_AMOUNT: int, list_of_employee_instances: list) -> None:
     ''' Creates a single .docx file containing N filled pages '''
     OutputFile: Document = Document()
     configure_paragraph_styles(OutputFile)
@@ -132,7 +132,7 @@ def create_many_pages(PATH_TO_SINGLE_OUTPUT: str, PAGES_AMOUNT: int, list_of_emp
     create_single_page(OutputFile, False, list_of_employee_instances[-1])
 
     modify_pages(OutputFile)
-    OutputFile.save(PATH_TO_SINGLE_OUTPUT)
+    OutputFile.save(PATH_TO_OUTPUT)
 
     
 
@@ -143,6 +143,7 @@ def create_word_document(should_create_single_file: bool, PATH_TO_OUTPUT: str, E
         create_many_pages(PATH_TO_OUTPUT, EMPLOYEES_AMOUNT, list_of_employee_instances)
     else:
         create_many_files(PATH_TO_OUTPUT, EMPLOYEES_AMOUNT, list_of_employee_instances)
+
 
 
 if (__name__ == "__main__"):

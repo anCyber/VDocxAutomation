@@ -71,7 +71,7 @@ class Q_LineEdit(QLineEdit):
         self.setStyleSheet (f"{self.style_sheet_string}")
 
 
-        font = QFont("Arial", 16, 400, False)
+        font = QFont("Arial", 12, 400, False)
         self.setFont(font)
 
 
@@ -226,12 +226,12 @@ class Q_RunButton(QPushButton):
             """ + additional_qss + "}" + """
             .Q_RunButton:hover {
                 background-color: rgba(30, 48, 54, 1);
-                border-color: rgba(132, 159, 173, 1);
+                border-color: rgba(124, 150, 161, 1);
                 color: rgba(228, 230, 232, 1);
             }
             .Q_RunButton:pressed {
                 background-color: rgba(24, 40, 48, 1);
-                border-color: rgba(120, 148, 159, 1);
+                border-color: rgba(108, 130, 140, 1);
                 color: rgba(205, 209, 212, 1);
             }
             """
