@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+import pytrovich
 from pytrovich.enums import NamePart, Case
 from pytrovich.maker import PetrovichDeclinationMaker
 from pytrovich.detector import PetrovichGenderDetector

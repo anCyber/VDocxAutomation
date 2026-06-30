@@ -25,7 +25,7 @@ from main_script import run_program
 
 import sys
 import os
-from os.path import exists
+from os.path import exists, isdir
 
 
 class Window(QMainWindow):
